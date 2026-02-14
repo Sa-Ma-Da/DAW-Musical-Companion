@@ -1,0 +1,24 @@
+{
+  "name": "ableton-harmonic-companion",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sa-Ma-Da/ableton-harmonic-companion.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Sa-Ma-Da/ableton-harmonic-companion/issues"
+  },
+  "homepage": "https://github.com/Sa-Ma-Da/ableton-harmonic-companion#readme",
+  "devDependencies": {
+    "electron": "^40.4.1"
+  }
+}
