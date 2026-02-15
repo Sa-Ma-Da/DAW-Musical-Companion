@@ -1,9 +1,82 @@
 <!DOCTYPE html>
 <html>
 
-<body style="background:#111;color:white;font-family:sans-serif;">
-    <h1>Ableton Harmonic Companion</h1>
-    <p>Phase 1 UI Loaded</p>
+<body
+    style="background:#111;color:#eee;font-family:'Segoe UI', sans-serif;margin:0;padding:20px;display:flex;flex-direction:column;gap:20px;">
+    <h1 style="font-weight:300;letter-spacing:1px;margin-bottom:10px;">Ableton Harmonic Companion</h1>
+
+    <div style="background:#222;padding:15px;border-radius:8px;box-shadow:0 4px 6px rgba(0,0,0,0.3);">
+        <label for="midiInputSelect" style="display:block;margin-bottom:8px;font-size:0.9em;color:#aaa;">MIDI Input
+            Device</label>
+        <div style="display:flex;gap:10px;">
+            <select id="midiInputSelect"
+                style="flex-grow:1;padding:8px;background:#333;color:white;border:1px solid #444;border-radius:4px;outline:none;">
+                <option value="">Scanning for devices...</option>
+            </select>
+            <button id="refreshMidiBtn"
+                style="padding:8px 15px;background:#444;color:white;border:none;border-radius:4px;cursor:pointer;font-size:0.9em;">&#x21bb;</button>
+        </div>
+    </div>
+
+    <div
+        style="background:#222;padding:20px;border-radius:8px;box-shadow:0 4px 6px rgba(0,0,0,0.3);min-height:100px;display:flex;align-items:center;justify-content:center;">
+        <div id="activeNotesDisplay" style="font-size:2em;font-weight:bold;color:#4db8ff;text-align:center;">
+            Waiting for input...
+        </div>
+    </div>
+
+    <div
+        style="background:#222;padding:15px;border-radius:8px;box-shadow:0 4px 6px rgba(0,0,0,0.3);flex-grow:1;display:flex;flex-direction:column;">
+        <h3 style="margin:0 0 10px 0;font-size:1em;color:#aaa;">Recent Activity</h3>
+        <div id="midiLog"
+            style="flex-grow:1;overflow-y:auto;font-family:monospace;font-size:0.9em;color:#888;max-height:150px;">
+            <!-- Log entries will appear here -->
+        </div>
+    </div>
+
+    <!-- Debug Section -->
+    <div style="background:#330000;padding:10px;border-radius:4px;color:#ff9999;font-size:0.8em;margin-top:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
+            <strong>Debug Log:</strong>
+            <button onclick="require('electron').ipcRenderer.send('toggle-dev-tools')"
+                style="padding:2px 8px;background:#500;color:white;border:1px solid #700;cursor:pointer;">DevTools</button>
+        </div>
+        <pre id="debugDeviceList" style="margin:0;white-space:pre-wrap;">Initializing...</pre>
+    </div>
+
+    <script>
+        // Global Error Handler to catch require errors or syntax errors
+        const debugBox = document.getElementById('debugDeviceList');
+        const originalLog = console.log;
+        const originalError = console.error;
+
+        function logToUi(msg, isError = false) {
+            const line = document.createElement('div');
+            line.textContent = (isError ? '[ERROR] ' : '[INFO] ') + msg;
+            line.style.borderBottom = '1px solid #422';
+            if (isError) line.style.color = '#ff5555';
+            debugBox.appendChild(line);
+            debugBox.scrollTop = debugBox.scrollHeight;
+        }
+
+        console.log = (...args) => {
+            originalLog(...args);
+            logToUi(args.join(' '));
+        };
+        console.error = (...args) => {
+            originalError(...args);
+            logToUi(args.join(' '), true);
+        };
+        window.onerror = (msg, url, lineNo, columnNo, error) => {
+            logToUi(`Uncaught: ${msg} @ ${lineNo}:${columnNo}\n${error ? error.stack : ''}`, true);
+            return false;
+        };
+        window.addEventListener('unhandledrejection', event => {
+            logToUi(`Unhandled Promise: ${event.reason}`, true);
+        });
+    </script>
+
+    <script src="./src/renderer.js"></script>
 </body>
 
 </html>

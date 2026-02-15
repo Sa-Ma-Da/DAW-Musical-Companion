@@ -1,5 +1,9 @@
 const { app, BrowserWindow } = require('electron');
 
+// Enable Web MIDI
+app.commandLine.appendSwitch('enable-features', 'WebMidi');
+app.commandLine.appendSwitch('enable-web-midi');
+
 function createWindow() {
   const win = new BrowserWindow({
     width: 800,
@@ -7,11 +11,35 @@ function createWindow() {
     backgroundColor: '#111111',
     webPreferences: {
       nodeIntegration: true,
-      contextIsolation: false
+      contextIsolation: false,
+      enableRemoteModule: true
     }
   });
 
   win.loadFile('index.html');
+
+  // Grant MIDI permissions
+  win.webContents.session.setPermissionCheckHandler((webContents, permission, requestingOrigin, details) => {
+    console.log(`[Main] Permission Check: ${permission}`);
+    if (permission === 'midi' || permission === 'midiSysex') {
+      return true;
+    }
+    return false;
+  });
+
+  win.webContents.session.setPermissionRequestHandler((webContents, permission, callback) => {
+    console.log(`[Main] Permission Request: ${permission}`);
+    if (permission === 'midi' || permission === 'midiSysex') {
+      return callback(true);
+    }
+    return callback(false);
+  });
 }
 
 app.whenReady().then(createWindow);
+
+const { ipcMain } = require('electron');
+ipcMain.on('toggle-dev-tools', (event) => {
+  const win = BrowserWindow.fromWebContents(event.sender);
+  if (win) win.webContents.toggleDevTools();
+});
