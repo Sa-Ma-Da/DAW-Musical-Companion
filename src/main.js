@@ -18,11 +18,18 @@ function createWindow() {
 
   win.loadFile('index.html');
 
+  // Auto-open DevTools so console errors are visible
+  win.webContents.openDevTools();
+
   // Grant MIDI permissions
   win.webContents.session.setPermissionCheckHandler((webContents, permission, requestingOrigin, details) => {
-    console.log(`[Main] Permission Check: ${permission}`);
     if (permission === 'midi' || permission === 'midiSysex') {
+      console.log(`[Main] Permission Check Allowed: ${permission}`);
       return true;
+    }
+    // Filter out common default checks to avoid noise
+    if (permission !== 'geolocation' && permission !== 'notifications') {
+      console.log(`[Main] Permission Check Denied: ${permission}`);
     }
     return false;
   });
