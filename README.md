@@ -28,9 +28,15 @@ The Companion doesn't just look at notes; it understands musical "flow" through 
 
 ## Quick Setup (Ableton Live)
 
-1.  **Virtual Port**: Create a virtual port in loopMIDI named "DAW-MC Bridge".
-2.  **Companion Config**: Select your MIDI controller as **Input** and "DAW-MC Bridge" as **Output**.
-3.  **Ableton Config**: Set a MIDI track's **MIDI From** to "DAW-MC Bridge" and set **Monitor** to **In**.
+1.  **Virtual Ports**: Create two virtual ports in loopMIDI:
+    *   `DAW-MC Input`: (Optional) To send MIDI from Ableton *into* the Companion for analysis.
+    *   `DAW-MC Bridge`: To send MIDI *from* the Companion into Ableton instruments.
+2.  **Companion Config**: 
+    *   Select your MIDI controller (or `DAW-MC Input`) as **Input**.
+    *   Select `DAW-MC Bridge` as **Output**.
+3.  **Ableton Config**: 
+    *   Create a MIDI track with an instrument.
+    *   Set **MIDI From** to `DAW-MC Bridge` and set **Monitor** to **In**.
 4.  **Play**: Drag suggested chords into the builder and press **Play** to drive your Ableton instruments.
 
 ## Installation
