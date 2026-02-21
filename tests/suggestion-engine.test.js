@@ -324,10 +324,12 @@ describe('SuggestionEngine', () => {
             }
         });
 
-        test('does not suggest the last chord played', () => {
+        test('deprioritizes (but still includes) the last chord played', () => {
             const result = suggestNextChords(['C Major'], 'C Major');
             const names = result.map(s => s.name);
-            expect(names).not.toContain('C Major');
+            // C Major should still appear, but not as the top suggestion
+            expect(names).toContain('C Major');
+            expect(result[0].name).not.toBe('C Major');
         });
 
         test('V → I motion: after G Major, C Major scores highest', () => {

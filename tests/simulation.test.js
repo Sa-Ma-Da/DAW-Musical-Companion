@@ -116,7 +116,7 @@ describe('Simulation: Full Workflow', () => {
         sendNoteOn(60);
 
         // Check UI for "Waiting" or partial state (Current logic doesn't detect 1 note chords)
-        const chordDisplay = document.getElementById('chordDisplay');
+        const chordDisplay = document.getElementById('liveChordDisplay');
         const activeNotes = document.getElementById('activeNotesDisplay');
 
         expect(activeNotes.textContent).toContain('C4');

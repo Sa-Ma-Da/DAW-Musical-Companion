@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, dialog } = require('electron');
 const { spawn } = require('child_process');
 const path = require('path');
 
@@ -77,4 +77,15 @@ ipcMain.on('launch-loopmidi', (event) => {
   } catch (err) {
     event.reply('loopmidi-status', { running: false, error: `Launch failed: ${err.message}` });
   }
+});
+
+// MIDI export save dialog handler
+ipcMain.handle('save-midi-dialog', async (event) => {
+  const win = BrowserWindow.fromWebContents(event.sender);
+  const result = await dialog.showSaveDialog(win, {
+    title: 'Export Progression as MIDI',
+    defaultPath: 'progression.mid',
+    filters: [{ name: 'MIDI Files', extensions: ['mid'] }]
+  });
+  return result;
 });

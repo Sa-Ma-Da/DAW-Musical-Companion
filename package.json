@@ -11,7 +11,8 @@
     "test:gate": "node scripts/regression-gate.js",
     "version:patch": "node scripts/version-bump.js patch",
     "version:minor": "node scripts/version-bump.js minor",
-    "sync": "node scripts/sync.js"
+    "sync": "node scripts/sync.js",
+    "debug:midi": "electron src/verification-main.js"
   },
   "repository": {
     "type": "git",
